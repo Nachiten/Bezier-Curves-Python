@@ -94,14 +94,14 @@ def generateLinePoints():
         quadratic_positions = []
 
     if showCubic:
-        # cubic_positions = [Position(1050 - 300, 600, "P0"),
-        #                   Position(1280 - 300, 200, "P1"),
-        #                   Position(1420 - 300, 600, "P2"),
-        #                   Position(1600 - 300, 200, "P3")]
-        cubic_positions = [Position(750, 450, "P0"),
-                           Position(980, 200, "P1"),
-                           Position(1120, 600, "P2"),
-                           Position(750, 350, "P3")]
+        cubic_positions = [Position(1050 - 300, 600, "P0"),
+                           Position(1280 - 300, 200, "P1"),
+                           Position(1420 - 300, 600, "P2"),
+                           Position(1600 - 300, 200, "P3")]
+        # cubic_positions = [Position(750, 450, "P0"),
+        #                   Position(980, 200, "P1"),
+        #                   Position(1120, 600, "P2"),
+        #                   Position(750, 350, "P3")]
     else:
         cubic_positions = []
 
@@ -199,6 +199,7 @@ showCubicRedCurve = False
 t = 0
 speed = 0.003
 
+
 # Posiciones de los puntos para cada curva
 linear_positions = []
 quadratic_positions = []
@@ -226,7 +227,7 @@ while run:
     screen.fill(white)
     clock.tick(fps)
     frameRate = int(clock.get_fps())
-    pygame.display.set_caption("Bezier Curve - FPS : {}".format(frameRate))
+    pygame.display.set_caption("Bezier s - FPS : {}".format(frameRate))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -242,6 +243,10 @@ while run:
                 generateConstantObjects()
                 drawPoints()
                 pygame.display.update()
+            if event.key == pygame.K_PLUS:
+                speed = min(0.03, speed + 0.002)
+            if event.key == pygame.K_MINUS:
+                speed = max(0.001, speed - 0.002)
         if event.type == pygame.MOUSEBUTTONDOWN:
             clickearBoton(pygame.mouse.get_pos())
             continue
