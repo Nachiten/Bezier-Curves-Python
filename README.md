@@ -1,4 +1,4 @@
-# Bezier-Curve-animation-using-python
+# Bezier-Curves-Python
 ## Made originally by [Auctux](https://www.youtube.com/channel/UCjPk9YDheKst1FlAf_KSpyA)
 ---
 ## Requirements
