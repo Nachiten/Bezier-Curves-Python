@@ -6,6 +6,7 @@ sizeXBoton = 50
 posYBoton = 102
 sizeYBoton = 30
 
+
 def resetCurves():
     global t
 
@@ -15,6 +16,7 @@ def resetCurves():
     curve1.clear()
     curve2.clear()
     curve3.clear()
+
 
 def drawPoints():
     # draw points
@@ -44,10 +46,16 @@ def generateConstantObjects():
     generarBotonEn(posXBoton + offsetsBotones[5], posYBoton, sizeXBoton, sizeYBoton, redColor)
 
     # T = 0.38 Text
-    text = font.render(" T = " + str(t)[:5], True, black)
+    text = font.render(" t = " + str(t)[:5], True, black)
     textRect = text.get_rect()
-    textRect.center = (680, 50)
+    textRect.center = (500, 50)
     screen.blit(text, textRect)
+
+    # Speed
+    textSpeed = font.render(" speed = " + str(speed)[:5], True, black)
+    textRect = textSpeed.get_rect()
+    textRect.center = (850, 50)
+    screen.blit(textSpeed, textRect)
 
     # Linear Text
     linear = font.render("Lineal:", True, black)
@@ -199,7 +207,6 @@ showCubicRedCurve = False
 t = 0
 speed = 0.003
 
-
 # Posiciones de los puntos para cada curva
 linear_positions = []
 quadratic_positions = []
@@ -266,9 +273,10 @@ while run:
                    showCubicRedCurve, showCubicBlueCurve)
 
     if len(cubic_curve) > 2:
-        pygame.draw.lines(screen, (179, 179, 179), False, curve1, 3)
-        pygame.draw.lines(screen, (179, 179, 179), False, curve3, 3)
-        pygame.draw.lines(screen, (179, 179, 179), False, curve2, 3)
+        if showCubicBlueCurve:
+            pygame.draw.lines(screen, (179, 179, 179), False, curve1, 3)
+            pygame.draw.lines(screen, (179, 179, 179), False, curve3, 3)
+            pygame.draw.lines(screen, (179, 179, 179), False, curve2, 3)
         pygame.draw.lines(screen, red, False, cubic_curve, 5)
 
     if len(quadratic_curve) > 2:
