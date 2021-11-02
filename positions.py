@@ -21,3 +21,13 @@ class Position:
         screen.blit(text, textRect)
         pygame.draw.circle(screen, color, (self.x, self.y), 12)
         pygame.draw.circle(screen, (120, 120, 120), (self.x, self.y), 10)
+
+    def getPos(self):
+        return self.x, self.y
+
+    def tocoPunto(self, posX, posY):
+        return self.x - 10 < posX < self.x + 10 and \
+               self.y - 10 < posY < self.y + 10
+
+    def getName(self):
+        return self.text

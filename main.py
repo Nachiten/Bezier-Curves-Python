@@ -6,6 +6,62 @@ sizeXBoton = 50
 posYBoton = 102
 sizeYBoton = 30
 
+pickingUpPoint = False
+pointPickedUp = (0, 0)
+
+
+def moverObjeto(unaPos):
+    global linear_positionsPosibles
+    global quadratic_positionsPosibles
+    global cubic_positionsPosibles
+
+    seModificoLista = escanearLista(linear_positions, unaPos)
+
+    if seModificoLista:
+        linear_positionsPosibles = linear_positions
+        resetCurves()
+        return
+
+    seModificoLista = escanearLista(quadratic_positions, unaPos)
+
+    if seModificoLista:
+        quadratic_positionsPosibles = quadratic_positions
+        resetCurves()
+        return
+
+    seModificoLista = escanearLista(cubic_positions, unaPos)
+
+    if seModificoLista:
+        cubic_positionsPosibles = cubic_positions
+        resetCurves()
+        return
+
+
+def escanearLista(lista, unaPos):
+    global pickingUpPoint
+    global pointPickedUp
+
+    posX = unaPos[0]
+    posY = unaPos[1]
+
+    index = 0
+
+    for position in lista:
+        if pickingUpPoint:
+            if pointPickedUp == position.getPos():
+                name = position.getName()
+                lista[index] = Position(posX, posY, name)
+                pickingUpPoint = False
+                return True
+        else:
+            if position.tocoPunto(posX, posY):
+                pickingUpPoint = True
+                pointPickedUp = position.getPos()
+                return False
+        index += 1
+
+    return False
+
 
 def resetCurves():
     global t
@@ -82,6 +138,19 @@ def generateConstantObjects():
     pygame.draw.line(screen, purple, (posXLine2, 700), (posXLine2, 150), 1)
 
 
+linear_positionsPosibles = [Position(50, 600, "P0"),
+                            Position(250, 200, "P1")]
+
+quadratic_positionsPosibles = [Position(460, 600, "P0"),
+                               Position(580, 450, "P1"),
+                               Position(520, 200, "P2")]
+
+cubic_positionsPosibles = [Position(750, 600, "P0"),
+                           Position(980, 200, "P1"),
+                           Position(1120, 600, "P2"),
+                           Position(1300, 200, "P3")]
+
+
 def generateLinePoints():
     global linear_positions
     global quadratic_positions
@@ -89,23 +158,17 @@ def generateLinePoints():
 
     # Generate line points
     if showLinear:
-        linear_positions = [Position(50, 600, "P0"),
-                            Position(250, 200, "P1")]
+        linear_positions = linear_positionsPosibles
     else:
         linear_positions = []
 
     if showCuadratic:
-        quadratic_positions = [Position(460, 600, "P0"),
-                               Position(580, 450, "P1"),
-                               Position(520, 200, "P2")]
+        quadratic_positions = quadratic_positionsPosibles
     else:
         quadratic_positions = []
 
     if showCubic:
-        cubic_positions = [Position(1050 - 300, 600, "P0"),
-                           Position(1280 - 300, 200, "P1"),
-                           Position(1420 - 300, 600, "P2"),
-                           Position(1600 - 300, 200, "P3")]
+        cubic_positions = cubic_positionsPosibles
         # cubic_positions = [Position(750, 450, "P0"),
         #                   Position(980, 200, "P1"),
         #                   Position(1120, 600, "P2"),
@@ -234,7 +297,7 @@ while run:
     screen.fill(white)
     clock.tick(fps)
     frameRate = int(clock.get_fps())
-    pygame.display.set_caption("Bezier s - FPS : {}".format(frameRate))
+    pygame.display.set_caption("Bezier Curves - FPS : {}".format(frameRate))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -256,6 +319,7 @@ while run:
                 speed = max(0.001, speed - 0.002)
         if event.type == pygame.MOUSEBUTTONDOWN:
             clickearBoton(pygame.mouse.get_pos())
+            moverObjeto(pygame.mouse.get_pos())
             continue
 
     if not runClock:
