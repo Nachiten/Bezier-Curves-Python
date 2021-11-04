@@ -87,7 +87,6 @@ def curvaCubica(positions, t, screen, color, curve_list,
     if showCubicBlue:
         curvaCuadratica(fourth_line, t, screen, (100, 100, 0), quad_curve, green)
         curvaCuadratica(fifth_line, t, screen, (100, 100, 0), quad_curve1, green)
-        curvaCuadratica(sixth_line, t, screen, (100, 100, 0), quad_curve2, green, False)
 
     position_1 = Position(a[0], a[1])
     position_2 = Position(b[0], b[1])
@@ -101,7 +100,6 @@ def curvaCubica(positions, t, screen, color, curve_list,
         end = curvaLineal(line2, t, screen, blue, False)
 
         pygame.draw.line(screen, blue, start, end, 2)
-
     if showCubicRed:
         pygame.draw.circle(screen, color, (int(curve[0]), int(curve[1])), 8)
-        curve_list.append((int(curve[0]), int(curve[1])))
+    curve_list.append((int(curve[0]), int(curve[1])))

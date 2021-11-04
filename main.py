@@ -358,9 +358,9 @@ while run:
     if len(cubic_curve) > 2:
         if showCubicBlueCurve:
             pygame.draw.lines(screen, (179, 179, 179), False, curve1, 3)
-            pygame.draw.lines(screen, (179, 179, 179), False, curve3, 3)
             pygame.draw.lines(screen, (179, 179, 179), False, curve2, 3)
-        pygame.draw.lines(screen, red, False, cubic_curve, 5)
+        if showCubicRedCurve:
+            pygame.draw.lines(screen, red, False, cubic_curve, 5)
 
     if len(quadratic_curve) > 2:
         pygame.draw.lines(screen, red, False, quadratic_curve, 5)
