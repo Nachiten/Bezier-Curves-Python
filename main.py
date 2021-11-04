@@ -1,15 +1,7 @@
 from curves import *
 
-posXBoton = 80
-sizeXBoton = 50
 
-posYBoton = 102
-sizeYBoton = 30
-
-pickingUpPoint = False
-pointPickedUp = (0, 0)
-
-
+# Analizo si se clickeo un punto y lo muevo si corresponde
 def moverObjeto(unaPos):
     global linear_positionsPosibles
     global quadratic_positionsPosibles
@@ -37,6 +29,7 @@ def moverObjeto(unaPos):
         return
 
 
+# Escanear todos los puntos para una lista (determinada curva) para ver si se toco alguno
 def escanearLista(lista, unaPos):
     global pickingUpPoint
     global pointPickedUp
@@ -63,6 +56,7 @@ def escanearLista(lista, unaPos):
     return False
 
 
+# Reiniciar todas las curvas a t = 0
 def resetCurves():
     global t
 
@@ -74,17 +68,19 @@ def resetCurves():
     curve3.clear()
 
 
+# Dibujar los puntos de las curvas
 def drawPoints():
-    # draw points
     for point in linear_positions:
-        point.display(screen, black)
+        point.mostrarEnPantalla(screen, black)
     for point in quadratic_positions:
-        point.display(screen, black)
+        point.mostrarEnPantalla(screen, black)
     for point in cubic_positions:
-        point.display(screen, black)
+        point.mostrarEnPantalla(screen, black)
 
 
-def generateConstantObjects():
+# Generar los botones y textos en la pantalla
+def generarObjetosConstantes():
+    # Colores a utilizar (r,g,b)
     grayColor = (50, 50, 50)
     redColor = (255, 30, 30)
     blueColor = (30, 30, 255)
@@ -138,25 +134,12 @@ def generateConstantObjects():
     pygame.draw.line(screen, purple, (posXLine2, 700), (posXLine2, 150), 1)
 
 
-linear_positionsPosibles = [Position(50, 600, "P0"),
-                            Position(250, 200, "P1")]
-
-quadratic_positionsPosibles = [Position(460, 600, "P0"),
-                               Position(580, 450, "P1"),
-                               Position(520, 200, "P2")]
-
-cubic_positionsPosibles = [Position(750, 600, "P0"),
-                           Position(980, 200, "P1"),
-                           Position(1120, 600, "P2"),
-                           Position(1300, 200, "P3")]
-
-
-def generateLinePoints():
+# Generar los puntos para cada curva
+def generarPuntosDeCurvas():
     global linear_positions
     global quadratic_positions
     global cubic_positions
 
-    # Generate line points
     if showLinear:
         linear_positions = linear_positionsPosibles
     else:
@@ -169,10 +152,6 @@ def generateLinePoints():
 
     if showCubic:
         cubic_positions = cubic_positionsPosibles
-        # cubic_positions = [Position(750, 450, "P0"),
-        #                   Position(980, 200, "P1"),
-        #                   Position(1120, 600, "P2"),
-        #                   Position(750, 350, "P3")]
     else:
         cubic_positions = []
 
@@ -189,10 +168,12 @@ def generateLinePoints():
     curve3 = []
 
 
+# Generar un nuevo boton y mostrarlo en la pantalla
 def generarBotonEn(posX, posY, sizeX, sizeY, color):
     pygame.draw.rect(screen, color, (posX, posY, sizeX, sizeY))
 
 
+# Modificar el booleano que corresponda en base a cual boton se toco
 def cambiarVariableSegunIndex(index):
     global showLinear
     global showCuadratic
@@ -232,23 +213,27 @@ def clickearBoton(unaPos):
             t = 0
 
             # Reseteo las listas de curvas
-            generateLinePoints()
+            generarPuntosDeCurvas()
 
             return
         index += 1
 
 
+# Datos de la pantalla
 width, height = 1920, 1080
 size = (1366, 768)
 
 pygame.init()
 screen = pygame.display.set_mode(size)
+
+# Reloj
 clock = pygame.time.Clock()
 fps = 60
 
+# Tipo de letra
 font = pygame.font.Font('freesansbold.ttf', 32)
 
-# colors
+# Colores (r,g,b)
 white = (235, 235, 235)
 black = (20, 20, 20)
 red = (242, 2, 2)
@@ -256,7 +241,7 @@ green = (2, 242, 102)
 blue = (2, 146, 242)
 purple = (205, 163, 255)
 
-# --- MOSTRAR CURVAS ---
+# Datos mostrados sobre curvas
 showLinear = False
 
 showCuadratic = False
@@ -275,6 +260,19 @@ linear_positions = []
 quadratic_positions = []
 cubic_positions = []
 
+# Puntos default para cada curva
+linear_positionsPosibles = [Position(50, 600, "P0"),
+                            Position(250, 200, "P1")]
+
+quadratic_positionsPosibles = [Position(460, 600, "P0"),
+                               Position(580, 450, "P1"),
+                               Position(520, 200, "P2")]
+
+cubic_positionsPosibles = [Position(750, 600, "P0"),
+                           Position(980, 200, "P1"),
+                           Position(1120, 600, "P2"),
+                           Position(1300, 200, "P3")]
+
 # Curvas a utilizar
 quadratic_curve = []
 cubic_curve = []
@@ -282,16 +280,26 @@ curve1 = []
 curve2 = []
 curve3 = []
 
-# Generar los puntos de cada curva
-generateLinePoints()
+# Ubicacion y tamaño de los botones
+posXBoton = 80
+sizeXBoton = 50
+posYBoton = 102
+sizeYBoton = 30
 
 # Las posiciones en X de los distintos botones
 offsetsBotones = [35, 250, 310, 680, 740, 800]
+
+# Datos sobre cuando se agarra un punto para moverlo
+pickingUpPoint = False
+pointPickedUp = (0, 0)
 
 # Juego corriendo
 run = True
 # Juego en pausa
 runClock = True
+
+# Generar los puntos de cada curva
+generarPuntosDeCurvas()
 
 while run:
     screen.fill(white)
@@ -299,43 +307,54 @@ while run:
     frameRate = int(clock.get_fps())
     pygame.display.set_caption("Bezier Curves - FPS : {}".format(frameRate))
 
+    # Escaneo los eventos ocurridos en el juego
     for event in pygame.event.get():
+        # Si se quito el juego
         if event.type == pygame.QUIT:
             run = False
+        # Si se presiono una tecla
         if event.type == pygame.KEYDOWN:
+            # Si se presiono escape
             if event.key == pygame.K_ESCAPE:
                 run = False
+            # Si se presiono espacio, pauso
             if event.key == pygame.K_SPACE:
                 runClock = not runClock
+            # Si se presiono r, reinicio t
             if event.key == pygame.K_r:
                 resetCurves()
                 screen.fill(white)
-                generateConstantObjects()
+                generarObjetosConstantes()
                 drawPoints()
                 pygame.display.update()
+            # Si se presiono +, aumento la velocidad
             if event.key == pygame.K_PLUS:
                 speed = min(0.03, speed + 0.002)
+            # Si se presiono -, disminuyo la velocidad
             if event.key == pygame.K_MINUS:
                 speed = max(0.001, speed - 0.002)
+        # Si se clickeo el mouse, analizo si se clickeo un boton o un punto
         if event.type == pygame.MOUSEBUTTONDOWN:
             clickearBoton(pygame.mouse.get_pos())
             moverObjeto(pygame.mouse.get_pos())
             continue
 
+    # No ejecuto el resto si estoy en pausa
     if not runClock:
         continue
 
-    generateConstantObjects()
+    generarObjetosConstantes()
 
-    # Curves
+    # Generar curvas
     if showLinear:
-        LinearCurve(linear_positions, t, screen, red, True)
+        curvaLineal(linear_positions, t, screen, red, True)
     if showCuadratic:
-        QuadraticCurve(quadratic_positions, t, screen, red, quadratic_curve, green, True, showCuadraticRedCurve)
+        curvaCuadratica(quadratic_positions, t, screen, red, quadratic_curve, green, True, showCuadraticRedCurve)
     if showCubic:
-        CubicCurve(cubic_positions, t, screen, red, cubic_curve, green, blue, curve1, curve2, curve3,
-                   showCubicRedCurve, showCubicBlueCurve)
+        curvaCubica(cubic_positions, t, screen, red, cubic_curve, green, blue, curve1, curve2, curve3,
+                    showCubicRedCurve, showCubicBlueCurve)
 
+    # Generar mas curvas
     if len(cubic_curve) > 2:
         if showCubicBlueCurve:
             pygame.draw.lines(screen, (179, 179, 179), False, curve1, 3)
@@ -346,12 +365,18 @@ while run:
     if len(quadratic_curve) > 2:
         pygame.draw.lines(screen, red, False, quadratic_curve, 5)
 
+    # Vuelvo a 0 si t paso de 1
     if t >= 1:
         resetCurves()
 
+    # Dibujo todos los puntos
     drawPoints()
 
+    # Incremento t
     t += speed
+
+    # Actualizo el display
     pygame.display.update()
 
+# Si salio del ciclo for, termina el programa
 pygame.quit()

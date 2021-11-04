@@ -2,7 +2,8 @@ import pygame
 from positions import Position
 
 
-def LinearCurve(positions, t, screen, color, trigger=True):
+# Genero una curva de bezier lineal
+def curvaLineal(positions, t, screen, color, trigger=True):
     P0_x = (1 - t) * positions[0].x
     P0_y = (1 - t) * positions[0].y
 
@@ -20,7 +21,8 @@ def LinearCurve(positions, t, screen, color, trigger=True):
         return int(curve[0]), int(curve[1])
 
 
-def QuadraticCurve(positions, t, screen, color, curve_list, green, trigger=True, showLine=True):
+# Generar una curva cuadratica de bezier
+def curvaCuadratica(positions, t, screen, color, curve_list, green, trigger=True, showLine=True):
     P0_x = pow((1 - t), 2) * positions[0].x
     P0_y = pow((1 - t), 2) * positions[0].y
 
@@ -37,8 +39,8 @@ def QuadraticCurve(positions, t, screen, color, curve_list, green, trigger=True,
         first_line = [positions[0], positions[1]]
         second_line = [positions[1], positions[2]]
 
-        a = LinearCurve(first_line, t, screen, green, False)
-        b = LinearCurve(second_line, t, screen, green, False)
+        a = curvaLineal(first_line, t, screen, green, False)
+        b = curvaLineal(second_line, t, screen, green, False)
 
         pygame.draw.line(screen, green, a, b, 2)
         if showLine:
@@ -47,8 +49,9 @@ def QuadraticCurve(positions, t, screen, color, curve_list, green, trigger=True,
         curve_list.append((int(curve[0]), int(curve[1])))
 
 
-def CubicCurve(positions, t, screen, color, curve_list,
-               green, blue, quad_curve, quad_curve1, quad_curve2, showCubicRed=True, showCubicBlue=True):
+# Genero una curva cubica de bezier
+def curvaCubica(positions, t, screen, color, curve_list,
+                green, blue, quad_curve, quad_curve1, quad_curve2, showCubicRed=True, showCubicBlue=True):
     P0_x = pow((1 - t), 3) * positions[0].x
     P0_y = pow((1 - t), 3) * positions[0].y
 
@@ -74,17 +77,17 @@ def CubicCurve(positions, t, screen, color, curve_list,
     fifth_line = [positions[1], positions[2], positions[3]]
     sixth_line = [positions[0], positions[2], positions[3]]
 
-    a = LinearCurve(first_line, t, screen, green, False)
-    b = LinearCurve(second_line, t, screen, green, False)
-    c = LinearCurve(third_line, t, screen, green, False)
+    a = curvaLineal(first_line, t, screen, green, False)
+    b = curvaLineal(second_line, t, screen, green, False)
+    c = curvaLineal(third_line, t, screen, green, False)
 
     pygame.draw.line(screen, green, a, b, 2)
     pygame.draw.line(screen, green, b, c, 2)
 
     if showCubicBlue:
-        QuadraticCurve(fourth_line, t, screen, (100, 100, 0), quad_curve, green)
-        QuadraticCurve(fifth_line, t, screen, (100, 100, 0), quad_curve1, green)
-        QuadraticCurve(sixth_line, t, screen, (100, 100, 0), quad_curve2, green, False)
+        curvaCuadratica(fourth_line, t, screen, (100, 100, 0), quad_curve, green)
+        curvaCuadratica(fifth_line, t, screen, (100, 100, 0), quad_curve1, green)
+        curvaCuadratica(sixth_line, t, screen, (100, 100, 0), quad_curve2, green, False)
 
     position_1 = Position(a[0], a[1])
     position_2 = Position(b[0], b[1])
@@ -94,8 +97,8 @@ def CubicCurve(positions, t, screen, color, curve_list,
     line2 = [position_2, position_3]
 
     if showCubicBlue:
-        start = LinearCurve(line1, t, screen, blue, False)
-        end = LinearCurve(line2, t, screen, blue, False)
+        start = curvaLineal(line1, t, screen, blue, False)
+        end = curvaLineal(line2, t, screen, blue, False)
 
         pygame.draw.line(screen, blue, start, end, 2)
 
