@@ -31,8 +31,8 @@ def moverObjeto(unaPos):
 
 # Escanear todos los puntos para una lista (determinada curva) para ver si se toco alguno
 def escanearLista(lista, unaPos):
-    global pickingUpPoint
-    global pointPickedUp
+    global agarrandoPunto
+    global puntoAgarrado
 
     posX = unaPos[0]
     posY = unaPos[1]
@@ -40,16 +40,16 @@ def escanearLista(lista, unaPos):
     index = 0
 
     for position in lista:
-        if pickingUpPoint:
-            if pointPickedUp == position.getPos():
+        if agarrandoPunto:
+            if puntoAgarrado == position.getPos():
                 name = position.getName()
                 lista[index] = Position(posX, posY, name)
-                pickingUpPoint = False
+                agarrandoPunto = False
                 return True
         else:
             if position.tocoPunto(posX, posY):
-                pickingUpPoint = True
-                pointPickedUp = position.getPos()
+                agarrandoPunto = True
+                puntoAgarrado = position.getPos()
                 return False
         index += 1
 
@@ -290,18 +290,16 @@ sizeYBoton = 30
 offsetsBotones = [35, 250, 310, 680, 740, 800]
 
 # Datos sobre cuando se agarra un punto para moverlo
-pickingUpPoint = False
-pointPickedUp = (0, 0)
+agarrandoPunto = False
+puntoAgarrado = (0, 0)
 
-# Juego corriendo
-run = True
-# Juego en pausa
-runClock = True
+juegoEjecutando = True
+juegoEnPausa = False
 
 # Generar los puntos de cada curva
 generarPuntosDeCurvas()
 
-while run:
+while juegoEjecutando:
     screen.fill(white)
     clock.tick(fps)
     frameRate = int(clock.get_fps())
@@ -311,15 +309,15 @@ while run:
     for event in pygame.event.get():
         # Si se quito el juego
         if event.type == pygame.QUIT:
-            run = False
+            juegoEjecutando = False
         # Si se presiono una tecla
         if event.type == pygame.KEYDOWN:
             # Si se presiono escape
             if event.key == pygame.K_ESCAPE:
-                run = False
+                juegoEjecutando = False
             # Si se presiono espacio, pauso
             if event.key == pygame.K_SPACE:
-                runClock = not runClock
+                juegoEnPausa = not juegoEnPausa
             # Si se presiono r, reinicio t
             if event.key == pygame.K_r:
                 resetCurves()
@@ -340,7 +338,7 @@ while run:
             continue
 
     # No ejecuto el resto si estoy en pausa
-    if not runClock:
+    if juegoEnPausa:
         continue
 
     generarObjetosConstantes()

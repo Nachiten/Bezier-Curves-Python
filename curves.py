@@ -75,7 +75,7 @@ def curvaCubica(positions, t, screen, color, curve_list,
     third_line = [positions[2], positions[3]]
     fourth_line = [positions[0], positions[1], positions[2]]
     fifth_line = [positions[1], positions[2], positions[3]]
-    sixth_line = [positions[0], positions[2], positions[3]]
+    #sixth_line = [positions[0], positions[2], positions[3]]
 
     a = curvaLineal(first_line, t, screen, green, False)
     b = curvaLineal(second_line, t, screen, green, False)
